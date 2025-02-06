@@ -2,6 +2,7 @@ export const carouselManager = (function() {
     const carouselImages = document.querySelectorAll('img');
     let currentImage = carouselImages[0];
     let arrowListenersAdded = false;
+    let autoSwitchInterval;
 
     function setupCarousel() {
         renderImages();
@@ -83,7 +84,31 @@ export const carouselManager = (function() {
         });
     }
 
+    function startAutoSwitch() {
+        autoSwitchInterval = setInterval(handleNextClick, 5000);
+    }
+
+    function stopAutoSwitch() {
+        clearInterval(autoSwitchInterval);
+    }
+
+    function resetAutoSwitch() {
+        stopAutoSwitch();
+        startAutoSwitch();
+    }
+
+    function setupAutoSwitch() {
+        document.addEventListener('click', (event) => {
+            if (event.target.closest('#previous') || event.target.closest('#next') || event.target.closest('.dot')) {
+                resetAutoSwitch();
+            }
+        });
+
+        startAutoSwitch();
+    }
+
     return {
-        setupCarousel
+        setupCarousel,
+        setupAutoSwitch
     }
 })();

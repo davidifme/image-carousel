@@ -1,6 +1,7 @@
 :root {
     --frame-width: 800px;
     --frame-height: 500px;
+    --corner-rounding: 12px;
 }
 
 body {
@@ -13,6 +14,8 @@ body {
 img {
     min-width: var(--frame-width);
     min-height: var(--frame-height);
+    border-radius: var(--corner-rounding);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 #picture-frame {
