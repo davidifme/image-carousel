@@ -1,16 +1,17 @@
 export const carouselManager = (function() {
     const carouselImages = document.querySelectorAll('img');
     let currentImage = carouselImages[0];
+    let arrowListenersAdded = false;
 
     function setupCarousel() {
         renderImages();
         renderDots();
-        setupButtons();
-    }
-
-    function setupButtons() {
         setupDotImageSwitch();
-        setupArrowSwitchButtons();
+
+        if (!arrowListenersAdded) {
+            setupArrowSwitchButtons();
+            arrowListenersAdded = true;
+        }
     }
 
     function renderDots() {
@@ -41,36 +42,39 @@ export const carouselManager = (function() {
         });
     }
 
+    function handlePreviousClick() {
+        if (carouselImages.length > 1) {
+            if (currentImage === carouselImages[0]) {
+                currentImage = carouselImages[carouselImages.length - 1];
+            } else {
+                currentImage = carouselImages[parseInt(currentImage.dataset.index) - 1];
+            }
+            setupCarousel();
+        }
+    }
+
+    function handleNextClick() {
+        if (carouselImages.length > 1) {
+            if (currentImage === carouselImages[carouselImages.length - 1]) {
+                currentImage = carouselImages[0];
+            } else {
+                currentImage = carouselImages[parseInt(currentImage.dataset.index) + 1];
+            }
+            setupCarousel();
+        }
+    }
+
     function setupArrowSwitchButtons() {
         const previousImageButton = document.getElementById('previous');
         const nextImageButton = document.getElementById('next');
 
-        previousImageButton.addEventListener('click', () => {
-            if (carouselImages.length > 1) {
-                if (currentImage === carouselImages[0]) {
-                    currentImage = carouselImages[carouselImages.length - 1];
-                } else {
-                    currentImage = carouselImages[currentImage.dataset.index - 1];
-                }
-                setupCarousel();
-            }
-        });
-
-        nextImageButton.addEventListener('click', () => {
-            if (carouselImages.length > 1) {
-                if (currentImage === carouselImages[carouselImages.length - 1]) {
-                    currentImage = carouselImages[0];
-                } else {
-                    currentImage = carouselImages[currentImage.dataset.index + 1];
-                }
-                setupCarousel();
-            }
-        });
+        previousImageButton.addEventListener('click', handlePreviousClick);
+        nextImageButton.addEventListener('click', handleNextClick);
     }
 
     function setupDotImageSwitch() {
         const dots = document.querySelectorAll('.dot');
-        
+
         dots.forEach(dot => {
             dot.addEventListener('click', () => {
                 currentImage = carouselImages[dot.dataset.index];
