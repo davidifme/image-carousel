@@ -1,4 +1,7 @@
-import config from "eslint-config-standard";
+import globals from "globals";
+
 
 /** @type {import('eslint').Linter.Config[]} */
-export default [...[].concat(config)];
+export default [
+  {languageOptions: { globals: globals.browser }},
+];
